@@ -125,7 +125,8 @@ func (e *expectState) init(orgPath, sigFilePath, sigDir string) (string, error) 
 	}
 	e.tree = trees.Tree
 
-	reposInfo := new(community.Repos)
+	var reposInfo *community.Repos
+	reposInfo = new(community.Repos)
 	e.repos = make(map[string]*expectRepos)
 	for _, v := range e.tree {
 		patharr := strings.Split(v.Path, "/")
