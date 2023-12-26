@@ -141,7 +141,10 @@ func (e *expectState) init(orgPath, sigFilePath, sigDir string) (string, error) 
 		})
 		reposInfo.Repositories = append(reposInfo.Repositories, *singleRepo)
 	}
-	reposInfo.Validate()
+
+	if err = reposInfo.Validate(); err != nil {
+		return "", err
+	}
 	e.reposInfo = reposInfo
 
 	org := orgPath
@@ -231,7 +234,9 @@ func (e *expectState) check(
 		}
 	}
 
-	e.reposInfo.Validate()
+	if err = e.reposInfo.Validate(); err != nil {
+		return
+	}
 	repoMap := e.reposInfo.GetRepos()
 
 	if len(repoMap) == 0 {
@@ -484,7 +489,7 @@ func writeToLog(
 	fileName := fmt.Sprintf("log-%d.log", time.Now().Unix())
 	filePath := path.Join(logPath, fileName)
 
-	f, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	f, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644) // #nosec G302 G304
 	if err != nil {
 		return
 	}
